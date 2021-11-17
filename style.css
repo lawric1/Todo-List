@@ -1,3 +1,25 @@
-.addItemField {
+.todoForm {
     display: flex;
+    width: 250px;
+}
+
+.inputField {
+    width: inherit;
+}
+
+.taskList {
+    margin: 0px;
+    padding: 8px;
+}
+.task {
+    margin: 16px 0px 16px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 12px;
+}
+
+.description {
+    margin: "0px";
+    font-size: 16px;
 }
