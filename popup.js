@@ -2,6 +2,8 @@ var inputField = document.getElementById("inputField");
 var addBtn = document.getElementById("addBtn");
 var taskList = document.getElementById("taskList");
 
+getTasks();
+
 function addTask() {
     var task = document.createElement('li');
     task.classList.add("task");
@@ -30,6 +32,8 @@ function addTask() {
         taskList.appendChild(task);    
 
         inputField.value = ''
+
+        saveTask();
     }
     
 
@@ -41,9 +45,15 @@ function addTask() {
             taskDescription.style.textDecorationLine = "None";
             taskDescription.style.opacity = "1";
         }
+
+        saveTask();
     }, false);
 
-    deleteBtn.addEventListener("click", () => {task.remove()}, false);
+    deleteBtn.addEventListener("click", () => {
+        task.remove()
+
+        saveTask();
+    }, false);
 }
 // inputField.addEventListener("keydown", (event) => {
 //     if (event.code === "Enter") {
@@ -58,4 +68,39 @@ document.body.addEventListener("keydown", (event) => {
         event.preventDefault();
         return false;
     }
-}, false)
+}, false);
+
+
+function saveTask(){
+    var tasksToSave = [];
+    var currentTasks = taskList.getElementsByClassName("task");
+
+    [...currentTasks].forEach((task) => {
+        tasksToSave.push(task.outerHTML);
+    });
+
+    console.log(tasksToSave);
+
+    chrome.storage.local.set({'Tasks': tasksToSave})
+}   
+
+function getTasks(){
+    chrome.storage.local.get(['Tasks'], function(data) {
+        console.log(data.Tasks);
+        
+        data.Tasks.forEach((task) => {
+            temp = document.createElement('div');
+            temp.innerHTML = task;
+            taskList.appendChild(temp.firstChild);
+
+            // var deleteBtn = temp.firstChild.getElementsByClassName("deleteBtn");
+            // deleteBtn.addEventListener("click", () => {
+            //     temp.firstChild.remove()
+
+            //     saveTask();
+            // }, false);
+        });
+    });
+}
+
+//Add event listeners to checkbox and delete button of stored elements
