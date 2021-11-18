@@ -9,69 +9,62 @@ function addTask() {
     task.classList.add("task");
 
     var taskDescription = document.createElement('p');
-    task.classList.add("description");
+    taskDescription.classList.add("description");
     taskDescription.innerHTML = inputField.value;
     
     var controls = document.createElement('div');
 
     var checkbox = document.createElement('input');
+    checkbox.classList.add("checkbox");
     checkbox.type = "checkbox";
 
-    var deleteBtn = document.createElement('a');
+    var removeBtn = document.createElement('a');
     var buttomIcon = document.createElement('img');
     buttomIcon.src = chrome.runtime.getURL("images/bin.png");
-    deleteBtn.classList.add("deleteBtn");
-    deleteBtn.appendChild(buttomIcon);
+    removeBtn.classList.add("removeBtn");
+    removeBtn.appendChild(buttomIcon);
     
-
     if (taskDescription.innerHTML) {
         controls.appendChild(checkbox);
-        controls.appendChild(deleteBtn);
+        controls.appendChild(removeBtn);
         task.appendChild(taskDescription);
         task.appendChild(controls);
         taskList.appendChild(task);    
 
         inputField.value = ''
 
-        saveTask();
+        saveTasks();
     }
-    
 
+    updateTaskState(taskDescription, checkbox);
+    removeTask(removeBtn, task);
+}
+
+function updateTaskState(taskDescription, checkbox) {
     checkbox.addEventListener("click", () => {
         if (checkbox.checked) {
+            checkbox.setAttribute("checked", "checked");
             taskDescription.style.textDecorationLine = "line-through";
             taskDescription.style.opacity = "0.4";
         } else {
+            checkbox.removeAttribute("checked");
             taskDescription.style.textDecorationLine = "None";
             taskDescription.style.opacity = "1";
         }
 
-        saveTask();
-    }, false);
-
-    deleteBtn.addEventListener("click", () => {
-        task.remove()
-
-        saveTask();
+        saveTasks();
     }, false);
 }
-// inputField.addEventListener("keydown", (event) => {
-//     if (event.code === "Enter") {
-//         addTask();
-//     }
-// }, false);
 
-addBtn.addEventListener("click", addTask, false);
+function removeTask(removeBtn, task) {
+    removeBtn.addEventListener("click", () => {
+        task.remove()
 
-document.body.addEventListener("keydown", (event) => {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        return false;
-    }
-}, false);
+        saveTasks();
+    }, false);
+}
 
-
-function saveTask(){
+function saveTasks(){
     var tasksToSave = [];
     var currentTasks = taskList.getElementsByClassName("task");
 
@@ -88,19 +81,39 @@ function getTasks(){
     chrome.storage.local.get(['Tasks'], function(data) {
         console.log(data.Tasks);
         
-        data.Tasks.forEach((task) => {
-            temp = document.createElement('div');
-            temp.innerHTML = task;
+        data.Tasks.forEach((data) => {
+            var temp = document.createElement('div');
+            temp.innerHTML = data;
+
+            var task = temp.firstChild
+
             taskList.appendChild(temp.firstChild);
 
-            // var deleteBtn = temp.firstChild.getElementsByClassName("deleteBtn");
-            // deleteBtn.addEventListener("click", () => {
-            //     temp.firstChild.remove()
-
-            //     saveTask();
-            // }, false);
+            addEventListeners(task);
         });
     });
 }
 
-//Add event listeners to checkbox and delete button of stored elements
+function addEventListeners(task) {
+    var taskDescription = task.getElementsByClassName('description')[0];
+    var checkbox = task.getElementsByClassName('checkbox')[0];
+    var removeBtn = task.getElementsByClassName('removeBtn')[0];
+
+    console.log(taskDescription, checkbox, removeBtn);
+
+    updateTaskState(taskDescription, checkbox);
+    removeTask(removeBtn, task);
+}
+
+addBtn.addEventListener("click", addTask, false);
+
+document.body.addEventListener("keydown", (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        addTask();
+    }
+}, false);
+
+// Todo:
+    //  Style with CSS
+    // Add Edit Button
