@@ -23,3 +23,8 @@
     margin: "0px";
     font-size: 16px;
 }
+
+.deleteBtn img{
+    width: 16px;
+	padding-left: 8px;
+}
