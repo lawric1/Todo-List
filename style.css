@@ -1,3 +1,8 @@
+body, main {
+    background-color: #421642;
+    height: 300px;
+}
+
 .todoForm {
     display: flex;
     width: 250px;
@@ -5,12 +10,36 @@
 
 .inputField {
     width: inherit;
+    background-color: #421642;
+    color: #ccc;
+	border: 3px solid white;
+	border-radius: 6px;
+}
+
+.inputField:focus {
+    color: #ccc;
+    border: 3px solid #ccc;
+    outline: none !important;
+}
+
+.addBtn {
+    margin-left: 2px;
+	color: #421642;
+	font-weight: 600;
+	border: none;
+	border-radius: 6px;
+}
+
+.addBtn:hover {
+    background-color: #ccc;
 }
 
 .taskList {
     margin: 0px;
     padding: 8px;
+    color: #ccc;
 }
+
 .task {
     margin: 16px 0px 16px 0px;
     display: flex;
@@ -20,11 +49,43 @@
 }
 
 .description {
-    margin: "0px";
+    margin: 0px;
     font-size: 16px;
+}
+
+.checkbox {
+    background-color: transparent;
+    border: 2px solid #ccc;
 }
 
 .removeBtn img{
     width: 16px;
 	padding-left: 8px;
+}
+
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
+}
+::-webkit-scrollbar-button {
+    width: 0px;
+    height: 0px;
+}
+::-webkit-scrollbar-thumb {
+    background: #421642;
+    border: 1px solid #ccc;
+}
+::-webkit-scrollbar-track {
+    background: #cccccc;
+    border: 0px none #ffffff;
+}
+::-webkit-scrollbar-track:hover {
+    background: #cccccc;
+}
+::-webkit-scrollbar-track:active {
+    background: #cccccc;
+}
+::-webkit-scrollbar-corner {
+    background: transparent;
 }
